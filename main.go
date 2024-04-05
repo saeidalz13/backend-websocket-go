@@ -36,14 +36,14 @@ func HandleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	newConnection := &Connection{WsConn: ws, Egress: make(chan []byte)}
-	connections[ws.RemoteAddr().String()] = newConnection 
+	connections[ws.RemoteAddr().String()] = newConnection
 
 	log.Println("a new connection made:", ws.RemoteAddr().String())
 	go ManageWsConn(newConnection)
 }
 
 func ManageWsConn(conn *Connection) {
-	ws := conn.WsConn 
+	ws := conn.WsConn
 	// remove the connection from the in-memory storage if the connection ended
 	defer func() {
 		delete(connections, ws.RemoteAddr().String())
@@ -77,7 +77,3 @@ func main() {
 	log.Println("listening to port 8000")
 	http.ListenAndServe(":8000", mux)
 }
-
-// func sendHello(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("hello client!"))
-// }
